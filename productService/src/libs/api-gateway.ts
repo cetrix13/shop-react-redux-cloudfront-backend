@@ -1,4 +1,4 @@
-export const formatJSONResponse = <T>(response: T | Array<T>) => {
+export const formatJSONResponse = <T>(response: T | Array<T> | string) => {
   return {
     headers: {
       "Access-Control-Allow-Headers": "Content-Type",
