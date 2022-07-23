@@ -5,6 +5,7 @@ CREATE TABLE public.products (
 	title text NOT NULL,
 	description text NULL,
 	price int4 NULL,
+	img: text NULL,
 	CONSTRAINT products_pk PRIMARY KEY (id)
 );
 

@@ -52,6 +52,33 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"7567ec4b-b10c-48c5-9345-fc73348a80a8\",\r\n    \"title\": \"New antique phone\",\r\n    \"description\": \"phone description\",\r\n    \"price\": 200,\r\n    \"count\": 2,\r\n    \"img\": \"phone-8.jpg\"\r\n}"
+				},
+				"url": {
+					"raw": "https://dlamfdwrnf.execute-api.us-east-1.amazonaws.com/dev/products",
+					"protocol": "https",
+					"host": [
+						"dlamfdwrnf",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"dev",
+						"products"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

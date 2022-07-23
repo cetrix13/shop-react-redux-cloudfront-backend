@@ -1,6 +1,7 @@
 export enum HttpCode {
   OK = 200,
   NOT_FOUND = 404,
+  SERVER_ERROR = 500,
 }
 
 export const formatJSONResponse = <T>(response: T | Array<T> | string, code: number = HttpCode.OK) => {

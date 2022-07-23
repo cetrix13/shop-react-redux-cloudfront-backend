@@ -13,7 +13,7 @@ jest.mock('pg', () => {
 
 
 describe('getProductsById', () => {
-   let client;
+  let client;
   beforeEach(() => {
     client = new Client();
   });

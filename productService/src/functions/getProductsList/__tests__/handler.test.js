@@ -6,6 +6,6 @@ describe('getProductsList', () => {
 
       const products = response && JSON.parse(response.body);
 
-      expect(products.length).toBe(8);
+      expect(products.length).toBe(6);
   });
 })
