@@ -5,9 +5,16 @@ export default {
   events: [
     {
       http: {
-        method: 'post',
-        path: 'products',
+        method: 'PUT',
+        path: 'uploaded/{name}',
         cors: true,
+        request: {
+          parameters: {
+            paths: {
+              name: true,
+            }
+          }
+        }
       },
     },
   ],
