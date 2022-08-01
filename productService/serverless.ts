@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 import getProductsList from '@functions/getProductsList';
 import getProductsById from '@functions/getProductsById';
+import postProducts from '@functions/postProducts';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -9,6 +10,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
+    stage: 'dev',
     region: 'us-east-1',
     apiGateway: {
       minimumCompressionSize: 1024,
@@ -20,14 +22,14 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { getProductsList, getProductsById },
+  functions: { getProductsList, getProductsById, postProducts },
   package: { individually: true },
   custom: {
     esbuild: {
       bundle: true,
       minify: true,
       sourcemap: true,
-      exclude: ['aws-sdk'],
+      exclude: ['aws-sdk', 'pg-native'],
       target: 'node14',
       define: { 'require.resolve': undefined },
       platform: 'node',
