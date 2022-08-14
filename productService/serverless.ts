@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 import getProductsList from '@functions/getProductsList';
 import getProductsById from '@functions/getProductsById';
 import postProducts from '@functions/postProducts';
+import catalogBatchProcess from '@functions/catalogBatchProcess';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -20,9 +21,41 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [{ 'Fn::GetAtt': ['SQSQueue', 'Arn'] }],
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: [{ Ref: 'SNSTopic' }],
+      },
+    ]
+  },
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: { QueueName: 'catalogItemsQueue' },
+      },
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: { TopicName: 'createProductTopic' },
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'alexander_dadykin@epam.com',
+          Protocol: 'email',
+          TopicArn: { Ref: 'SNSTopic' },
+        },
+      },
+    },
   },
   // import the function via paths
-  functions: { getProductsList, getProductsById, postProducts },
+  functions: { getProductsList, getProductsById, postProducts, catalogBatchProcess },
   package: { individually: true },
   custom: {
     esbuild: {
