@@ -55,6 +55,20 @@ const serverlessConfiguration: AWS = {
           Endpoint: 'alexander_dadykin@epam.com',
           Protocol: 'email',
           TopicArn: { Ref: 'SNSTopic' },
+          FilterPolicy: {
+            price: [{ numeric: ['>=', 100] }],
+          },
+        },
+      },
+      SNSSubscriptionPriceLess100: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'dadykin89@gmail.com',
+          Protocol: 'email',
+          TopicArn: { Ref: 'SNSTopic' },
+          FilterPolicy: {
+            price: [{ numeric: ['<', 100] }],
+          },
         },
       },
     },
