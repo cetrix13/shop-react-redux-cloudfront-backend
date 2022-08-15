@@ -5,12 +5,12 @@ import { BUCKET_REGION, PARSED_FOLDER, PRODUCT_UPLOADED_FILES_BUCKET, UPLOADED_F
 const AWS = require('aws-sdk');
 const csv = require('csv-parser');
 
-const S3 = new AWS.S3({ region: BUCKET_REGION });
-const SQS = new AWS.SQS({ region: process.env.APP_REGION });
-
 export const importProductsFileParser = async (event: {
   Records: { s3: { bucket: { name: string }; object } }[];
 }) => {
+  const S3 = new AWS.S3({ region: BUCKET_REGION });
+  const SQS = new AWS.SQS({ region: process.env.APP_REGION });
+
   for (const record of event.Records) {
 
     const PARAMS = {

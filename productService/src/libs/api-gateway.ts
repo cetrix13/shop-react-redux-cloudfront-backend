@@ -9,7 +9,7 @@ export const formatJSONResponse = <T>(response: T | Array<T> | string, code: num
     headers: {
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "OPTIONS,GET"
+      "Access-Control-Allow-Methods": "OPTIONS,GET,PUT,POST"
     },
     statusCode: code,
     body: JSON.stringify(response)

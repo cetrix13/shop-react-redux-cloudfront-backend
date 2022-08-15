@@ -1,12 +1,9 @@
 import { formatJSONResponse, HttpCode } from 'src/libs/api-gateway';
 import { middyfy } from 'src/libs/lambda';
 import { Client } from 'pg';
-import dotenv from 'dotenv';
 import QUERIES from 'src/constants/queries';
 
-dotenv.config();
-
-const createProduct = async ({ body }) => {
+export const createProduct = async ({ body }) => {
   const { id, title, description, price, count, img } = JSON.parse(body);
 
   const client = new Client({
@@ -19,7 +16,7 @@ const createProduct = async ({ body }) => {
   await client.connect();
 
   try {
-    await client.query(QUERIES.createPost(id, title, description, price, count, img));
+    await client.query(QUERIES.createPost(id, title, description, count, price, img));
   } catch (err) {
     console.log(err);
     return formatJSONResponse('Server error', HttpCode.SERVER_ERROR);
@@ -27,7 +24,9 @@ const createProduct = async ({ body }) => {
     await client.end();
   }
 
-  return formatJSONResponse('OK');
+  const newProduct = { id, title, description, price, count, img };
+
+  return formatJSONResponse(newProduct);
 }
 
 export const main = middyfy(createProduct);
