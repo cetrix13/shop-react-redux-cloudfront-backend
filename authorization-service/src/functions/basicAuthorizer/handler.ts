@@ -13,10 +13,10 @@ const generatePolicy = (principalId, resource, effect) => ({
 });
 
 const basicAuthorizer = async (event) => {
-  const { headers: Authorization } = event;
+  const { headers: { Authorization } } = event;
 
   let effect = 'Deny';
-  const credentials = Authorization.split(' ')[1];
+  const credentials = Authorization;
   
   try {
     

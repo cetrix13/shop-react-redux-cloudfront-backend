@@ -6,7 +6,7 @@ const serverlessConfiguration: AWS = {
   service: 'authorization-service',
   frameworkVersion: '3',
   useDotenv: true,
-  plugins: ['serverless-esbuild'],
+  plugins: ['serverless-esbuild', 'serverless-dotenv-plugin'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
