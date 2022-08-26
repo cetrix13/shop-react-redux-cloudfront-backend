@@ -1,1 +1,1 @@
-export { default as hello } from './basicAuthorizer';
+export { default as basicAuthorizer } from './basicAuthorizer';

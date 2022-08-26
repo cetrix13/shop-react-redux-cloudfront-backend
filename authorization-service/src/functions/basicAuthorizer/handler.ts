@@ -1,7 +1,6 @@
-// import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 
-const generatePolicy = (principalId, resource, effect = "Allow") => ({
+const generatePolicy = (principalId, resource, effect) => ({
   principalId,
   policyDocument: {
     Version: "2012-10-17",
@@ -16,13 +15,27 @@ const generatePolicy = (principalId, resource, effect = "Allow") => ({
 const basicAuthorizer = async (event) => {
   const { headers: Authorization } = event;
 
-  if (!Authorization) {
-    throw new Error("Unauthorized");
+  let effect = 'Deny';
+  const credentials = Authorization.split(' ')[1];
+  
+  try {
+    
+    if (!credentials) {
+      throw new Error("Unauthorized");
+    }
+
+    const buffer = Buffer.from(credentials, 'base64');
+    const [username, password] = buffer.toString('utf-8').split(':');
+
+    const storePassword = process.env[username];
+
+    effect = storePassword && storePassword === password ? 'Allow' : 'Deny';
+
+  } catch(err) {
+    console.error(err);
   }
 
-  const effect = 'Deny';
-
-  return generatePolicy(Authorization, event.methodArn, effect);
+  return generatePolicy(credentials, event.methodArn, effect);
 };
 
 export const main = middyfy(basicAuthorizer);
