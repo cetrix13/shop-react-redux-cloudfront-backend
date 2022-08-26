@@ -1,4 +1,4 @@
-title,description,count,price,img
-old fashioned phone,phone from 40s,1,200,phone-7
-vintage phone,phone from 20th,1,500,phone-8
-antique phone,anique phone description,1,800,phone-8
+id,title,description,count,price,img
+7567ec4b-b10c-48c5-9345-fc73c48a8021,old fashioned phone,phone from 40s,1,200,phone-7.jpg
+7567ec4b-b10c-48c5-9345-fc73c48a8022,vintage phone,phone from 20th,1,500,phone-8.jpg
+7567ec4b-b10c-48c5-9345-fc73c48a8023,antique phone,anique phone description,1,800,phone-8.jpg

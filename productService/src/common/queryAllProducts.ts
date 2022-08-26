@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
 import { Client } from 'pg';
 import QUERIES from 'src/constants/queries';
-
-dotenv.config();
 
 export const queryAllProducts = async (): Promise<Product[]> => {
   const client = new Client({

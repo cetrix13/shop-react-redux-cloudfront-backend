@@ -8,6 +8,9 @@ const csv = require('csv-parser');
 export const importProductsFileParser = async (event: {
   Records: { s3: { bucket: { name: string }; object } }[];
 }) => {
+  const S3 = new AWS.S3({ region: BUCKET_REGION });
+  const SQS = new AWS.SQS({ region: process.env.APP_REGION });
+
   for (const record of event.Records) {
 
     const PARAMS = {
@@ -15,9 +18,7 @@ export const importProductsFileParser = async (event: {
       Key: decodeURIComponent(record.s3.object.key)
     };
 
-    const S3 = new AWS.S3({ region: BUCKET_REGION });
-
-    const records = await new Promise((resolve, reject) => {
+    const records = await new Promise<any[]>((resolve, reject) => {
       let data = [];
 
       S3.getObject(PARAMS)
@@ -30,6 +31,15 @@ export const importProductsFileParser = async (event: {
 
     console.log('records', records);
 
+    for (const item of records) {
+      await SQS
+        .sendMessage({
+          QueueUrl: process.env.SQS_URL,
+          MessageBody: JSON.stringify(item),
+        })
+        .promise();
+    }
+
     const parsedFileName = record.s3.object.key.replace(UPLOADED_FOLDER, PARSED_FOLDER);
 
     const copiedFile = await S3.copyObject({
@@ -39,10 +49,10 @@ export const importProductsFileParser = async (event: {
     }).promise();
 
     if (copiedFile) {
-       await S3.deleteObject({
-          Bucket: PRODUCT_UPLOADED_FILES_BUCKET,
-          Key: record.s3.object.key,
-        }).promise();
+      await S3.deleteObject({
+        Bucket: PRODUCT_UPLOADED_FILES_BUCKET,
+        Key: record.s3.object.key,
+      }).promise();
     }
   }
 

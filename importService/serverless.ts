@@ -5,6 +5,7 @@ import importProductsFileParser from '@functions/importProductsFileParser';
 const serverlessConfiguration: AWS = {
   service: 'import-service',
   frameworkVersion: '3',
+  useDotenv: true,
   plugins: ['serverless-esbuild', 'serverless-offline'],
   provider: {
     name: 'aws',
@@ -16,6 +17,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      SQS_URL: "${env:SQS_URL}",
+      APP_REGION: "${env:APP_REGION}",
     },
     // Permissions for Lambda to access S3
     iamRoleStatements: [
@@ -28,6 +31,11 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: 's3:*',
         Resource: ['arn:aws:s3:::dadykin-uploaded-files/*'],
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: ['arn:aws:sqs:us-east-1:730643092676:catalogItemsQueue']
       }
     ]
   },
