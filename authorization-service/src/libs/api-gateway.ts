@@ -10,3 +10,11 @@ export const formatJSONResponse = (response: Record<string, unknown>) => {
     body: JSON.stringify(response)
   }
 }
+
+export enum HttpCode {
+  OK = 200,
+  NOT_FOUND = 404,
+  SERVER_ERROR = 500,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+}

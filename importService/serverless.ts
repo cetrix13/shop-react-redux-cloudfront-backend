@@ -19,7 +19,7 @@ const serverlessConfiguration: AWS = {
             'arn:aws:lambda:${aws:region}:${aws:accountId}:function:authorization-service-dev-basicAuthorizer',
           type: 'request',
           identitySource: '$request.header.Authorization',
-          enableSimpleResponses: true,
+          enableSimpleResponses: false,
           payloadVersion: '2.0',
         },
 

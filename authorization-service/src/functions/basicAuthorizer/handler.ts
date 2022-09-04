@@ -12,30 +12,33 @@ const generatePolicy = (principalId, resource, effect) => ({
   },
 });
 
+const EFFECT = {
+  allow: 'Allow',
+  deny: 'Deny'
+}
+
 const basicAuthorizer = async (event) => {
   const { headers: { Authorization } } = event;
 
-  let effect = 'Deny';
   const credentials = Authorization;
   
-  try {
-    
-    if (!credentials) {
-      throw new Error("Unauthorized");
-    }
+  if (!credentials) {
+    console.error('Unauthorzied');
+    return generatePolicy('None', event.methodArn, EFFECT.deny);
+  }
 
-    const buffer = Buffer.from(credentials, 'base64');
+  try {
+    const buffer = Buffer.from(credentials.split(' ')[1], 'base64');
     const [username, password] = buffer.toString('utf-8').split(':');
 
     const storePassword = process.env[username];
 
-    effect = storePassword && storePassword === password ? 'Allow' : 'Deny';
-
+    const effect = storePassword && storePassword === password ? EFFECT.allow : EFFECT.deny;
+    return generatePolicy(credentials, event.methodArn, effect);
   } catch(err) {
-    console.error(err);
+    console.error(`Server Error: ${err}`);
+    return generatePolicy('None', event.methodArn, EFFECT.deny);
   }
-
-  return generatePolicy(credentials, event.methodArn, effect);
 };
 
 export const main = middyfy(basicAuthorizer);
