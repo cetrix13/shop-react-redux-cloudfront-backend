@@ -10,6 +10,21 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
+    httpApi: {
+      cors: true,
+      authorizers: {
+        httpApiRequestAuthorizer: {
+          name: 'httpApiRequestAuthorizer',
+          functionArn:
+            'arn:aws:lambda:${aws:region}:${aws:accountId}:function:authorization-service-dev-basicAuthorizer',
+          type: 'request',
+          identitySource: '$request.header.Authorization',
+          enableSimpleResponses: false,
+          payloadVersion: '2.0',
+        },
+
+      },
+    },
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
